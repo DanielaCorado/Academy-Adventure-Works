@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: This model represents all product data.
+    columns:
+      - name: product_sk
+        description: Primary key of the product table.
+
+      - name: product_name
+        description: Name of the product.
+
+
+

@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: dim_customers
+    columns:
+      - name: customer_sk
+        description: Primary key of the customer dimension.
+        tests:
+          - unique
+          - not_null
+
+      - name: first_name
+        description: First name of the customer.
+
+      - name: last_name
+        description: Last name of the customer.
+
+      - name: card_type
+        description: Type of card used by the customer.
+
+      - name: territory_name
+        description: Name of the country/region.
+
+      - name: country_region_code
+        description: Country's region/state code.
