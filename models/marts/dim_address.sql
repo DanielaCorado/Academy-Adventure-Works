@@ -30,7 +30,7 @@ with adress as (
     left join country on stateprovince.country_region_code = country.country_region_code  
 )
 
-, fulladress as (
+, final_table as (
     select 
         address_sk
         , address_id
@@ -42,4 +42,4 @@ with adress as (
 )
 
 select *
-from fulladress
+from final_table

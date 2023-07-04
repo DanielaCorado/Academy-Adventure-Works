@@ -39,6 +39,12 @@ models:
       +tags:
         - "stg"
 
+     marintermediatets:
+      materialized: table
+      +schema: ints_adventure
+      +tags:
+        - "ints"
+
      marts:
       materialized: table
       +schema: marts_adventure

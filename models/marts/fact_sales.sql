@@ -1,16 +1,6 @@
-with sales_order_header as (
+with dim_address as (
     select *
-    from {{ ref('stg_sap_adw_salesorderheader') }}
-)
-
-, sales_order_detail as (
-    select *
-    from {{ ref('stg_sap_adw_salesorderdetail') }}
-)
-
-, staging_header_reason as (
-    select  *
-    from {{ ref ('stg_sap_adw_salesorderheadersalesreason') }}
+    from {{ ref('dim_address') }}
 )
 
 , dim_customers as (
@@ -18,63 +8,70 @@ with sales_order_header as (
     from {{ ref('dim_customers') }}
 )
 
-, dim_sales_reason as (
+, dim_products as (
+    select  *
+    from {{ ref ('dim_products') }}
+)
+
+, int_header_detail_reason_sales as (
     select *
-    from {{ ref('dim_sales_reason') }}
+    from {{ ref ('int_header_detail_reason_sales') }}
 )
 
-, joining_sales_order_header as (
+, joining as (
     select
-        {{ dbt_utils.generate_surrogate_key(['sales_order_header.shipto_address_id'])}} as address_fk
-        , dim_customers.customer_sk as customer_fk 
-        , dim_sales_reason.reason_sk as reason_fk 
-        , sales_order_header.sales_order_id
-        , sales_order_header.order_date
-        , sales_order_header.sub_total
-    from sales_order_header
-    left join dim_customers
-        on sales_order_header.customer_id = dim_customers.customer_id
-    left join staging_header_reason
-        on sales_order_header.sales_order_id = staging_header_reason.sales_order_id
-    inner join dim_sales_reason
-        on staging_header_reason.sales_reason_id = dim_sales_reason.sales_reason_id
+        dim_address.address_sk as address_fk
+        , dim_customers.customer_sk as customer_fk
+        , dim_products.product_sk as product_fk
+        , int_header_detail_reason_sales.sales_order_id
+        , int_header_detail_reason_sales.order_date  
+        , int_header_detail_reason_sales.reason_name
+        , int_header_detail_reason_sales.sales_status
+        , int_header_detail_reason_sales.order_qty
+        , int_header_detail_reason_sales.unit_price
+        , int_header_detail_reason_sales.unit_price_discount
+    from int_header_detail_reason_sales
+    left join dim_address on int_header_detail_reason_sales.shipto_address_id =  dim_address.address_id
+    left join dim_customers on int_header_detail_reason_sales.customer_id =  dim_customers.customer_id
+    left join dim_products on int_header_detail_reason_sales.product_id =  dim_products.product_id
 )
 
-, joining_sales_order_detail as (
+, trensformed as (
     select
-        joining_sales_order_header.address_fk
-        , joining_sales_order_header.customer_fk 
-        , joining_sales_order_header.reason_fk 
-        , {{ dbt_utils.generate_surrogate_key(['sales_order_detail.product_id'])}} as product_fk
-        , joining_sales_order_header.order_date
-        , sales_order_detail.order_qty
-        , sales_order_detail.unit_price
-        , sales_order_detail.unit_price_discount
-        , (sales_order_detail.order_qty * sales_order_detail.unit_price) as full_value
-    from joining_sales_order_header
-    left join sales_order_detail 
-        on joining_sales_order_header.sales_order_id = sales_order_detail.sales_order_id
+        *
+        , order_qty * unit_price as gross_revenue
+        , (1-unit_price_discount) * order_qty * unit_price as revenue
+        , case 
+            when unit_price_discount > 0 then true
+            else false
+        end as is_discount
+    from joining
+
 )
 
 , final_table as (
-    select distinct
+    select
         {{ dbt_utils.generate_surrogate_key([
             'address_fk'
-            ,'reason_fk'
             ,'customer_fk'
             ,'product_fk'
-            ,'order_date']) }} as sale_sk
+            , 'sales_order_id'
+            ,'order_date'
+            ,'reason_name']) }} as sale_sk
         , address_fk
-        , reason_fk
         , customer_fk
         , product_fk
         , order_date
+        , reason_name
+        , sales_status
         , order_qty
         , unit_price
-        , full_value
         , unit_price_discount
-    from joining_sales_order_detail
+        , gross_revenue
+        , revenue
+        , is_discount
+    from trensformed
 )
 
-select * 
+select *
 from final_table
