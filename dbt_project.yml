@@ -39,7 +39,7 @@ models:
       +tags:
         - "stg"
 
-     marintermediatets:
+     intermediatets:
       materialized: table
       +schema: ints_adventure
       +tags:
