@@ -27,6 +27,7 @@ with dim_address as (
         , int_header_detail_reason_sales.order_date  
         , int_header_detail_reason_sales.reason_name
         , int_header_detail_reason_sales.sales_status
+        , int_header_detail_reason_sales.sub_total
         , int_header_detail_reason_sales.order_qty
         , int_header_detail_reason_sales.unit_price
         , int_header_detail_reason_sales.unit_price_discount
@@ -61,9 +62,11 @@ with dim_address as (
         , address_fk
         , customer_fk
         , product_fk
+        , sales_order_id
         , order_date
         , reason_name
         , sales_status
+        , sub_total
         , order_qty
         , unit_price
         , unit_price_discount

@@ -41,9 +41,10 @@ with person as (
 , final_table as (
     select
         customer_sk
-        , customer_id			
+        , customer_id
         , first_name				
         , last_name	
+        , concat(first_name, ' ', last_name) as full_name
         , card_type							
     from joining
 )
