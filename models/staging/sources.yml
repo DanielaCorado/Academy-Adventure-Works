@@ -1,0 +1,183 @@
+
+version: 2
+
+sources:
+  - name: sap_adw
+    description: This is the Adventure Works Postgres database replica
+    tables:
+      - name: salesorderheader
+        description: One record per order
+        columns:
+          - name: salesorderid
+            description: Primary key of the orders table
+            tests:
+              - unique
+              - not_null
+
+          - name: orderdate
+            description: When it was bought
+
+          - name: status
+            description: Order status
+
+          - name: customerid
+            description: Id of customer
+
+          - name: shiptoaddressid 
+            description: Shipping address id.
+
+          - name: subtotal 
+            description: Subtotal of the sale.
+
+      - name: salesorderdetail
+        description: One record per order detail
+        columns:
+          - name: salesorderdetailid
+            description: Chave primaria de order detail
+            tests:
+              - unique
+              - not_null
+
+          - name: salesorderid
+            description: Primary key of the orders table
+
+          - name: productid
+            description: Product id
+
+          - name: orderqty
+            description: Quantity of products bought
+
+          - name: unitprice
+            description: Unit value
+
+          - name: specialofferid
+            description: Key of the special offer
+
+          - name: unitpricediscount
+            description: Price discount
+  
+      - name: creditcard
+        description: Information about credit cards in sales
+        columns:
+          - name: creditcardid
+            description: Primary key of the sales credit card table
+            tests:
+              - unique
+              - not_null
+
+          - name: cardtype
+            description: Card type
+
+          - name: cardnumber
+            description: Card number
+
+      - name: personcreditcard
+        description: Information about credit cards associated with salespersons
+        columns:
+          - name: businessentityid
+            description: Primary key of the sales credit card table
+            tests:
+              - unique
+              - not_null
+
+          - name: creditcardid
+            description: Card ID
+
+      - name: salesorderheadersalesreason
+        description: Sales reasons
+        columns:
+          - name: salesorderid
+            description: Chave primaria de rasao da venda
+
+          - name: salesreasonid
+            description: Primary key of the sales reason table
+
+          - name: salesreasonid
+            description: Sales reason
+
+      - name: salesreason
+        description: Sales reasons
+        columns:
+          - name: salesreasonid
+            description: Primary key of the sales reason table
+            tests:
+              - unique
+              - not_null
+
+          - name: reason_name
+            description: Reason name
+
+          - name: reason_type
+            description: Reason type
+
+      - name: customer
+        description: Sales customers
+        columns:
+          - name: customerid
+            description: Primary key of the customer table
+            tests:
+              - unique
+              - not_null
+
+          - name: personid
+            description: Person ID
+            
+          - name: storeid
+            description: Store ID
+
+          - name: territoryid
+            description: Territory ID
+
+      - name: person
+        description: Stores personal information (customers, sellers, etc.)
+        columns:
+          - name: businessentityid
+            description: Primary key of person
+            tests:
+              - unique
+              - not_null
+
+          - name: firstname
+            description: Customer first name
+
+          - name: lastname
+            description: Customer last name
+
+      - name: address
+        description: Stores customer address information
+        columns:
+          - name: addressid
+            description: Primary key of person_address
+            tests:
+              - unique
+              - not_null
+
+      - name: countryregion
+        description: Stores country information linked to address details
+        columns:
+          - name: countryregioncode
+            description: Primary key of countryregion
+            tests:
+              - unique
+              - not_null
+
+      - name: stateprovince
+        description: Stores state information linked to address details
+        columns:
+          - name: stateprovinceid
+            description: Primary key of stateprovince
+            tests:
+              - unique
+              - not_null
+
+      - name: product
+        description: Stores product information
+        columns:
+          - name: productid
+            description: Primary key of products
+            tests:
+              - unique
+              - not_null
+          
+          - name: name
+            description: Product name

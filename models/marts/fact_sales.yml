@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: fact_sales
+    description: This is the adventure works postgres database replica
+    columns:
+      - name: sale_sk
+        description: Auto-incremental surrogate key.
+        tests:
+          - unique
+          - not_null 
+
+      - name: address_fk
+        description: Foreign key from dim_address.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_address')
+              field: address_sk
+
+      - name: customer_fk
+        description: Foreign key from dim_customers.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_sk
+
+      - name: product_fk
+        description: Foreign key from dim_products.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_sk
+
+      - name: order_date
+        description: Foreign key from dim_dates.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_dates')
+              field: metric_date
+
+      - name: sales_order_id
+        description: Id of the orders table.
+
+      - name: reason_name
+        description: Reason for sale.
+
+      - name: sales_status
+        description: Sales satatus.
+
+      - name: sub_total
+        description:  Subtotal of the sale.
+
+      - name: order_qty
+        description: Quantity of products bought
+
+      - name: unit_price
+        description: Unit value
+
+      - name: unit_price_discount
+        description: Price discount
+
+      - name: gross_revenue
+        description: Gross revenue of the sale.
+
+      - name: revenue
+        description: Revenue of the sale.
+
+      - name: is_discount
+        description: Indicates whether a discount was applied to the sale.
