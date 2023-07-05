@@ -41,3 +41,33 @@ models:
           - relationships:
               to: ref('dim_dates')
               field: metric_date
+
+      - name: sales_order_id
+        description: Id of the orders table.
+
+      - name: reason_name
+        description: Reason for sale.
+
+      - name: sales_status
+        description: Sales satatus.
+
+      - name: sub_total
+        description:  Subtotal of the sale.
+
+      - name: order_qty
+        description: Quantity of products bought
+
+      - name: unit_price
+        description: Unit value
+
+      - name: unit_price_discount
+        description: Price discount
+
+      - name: gross_revenue
+        description: Gross revenue of the sale.
+
+      - name: revenue
+        description: Revenue of the sale.
+
+      - name: is_discount
+        description: Indicates whether a discount was applied to the sale.

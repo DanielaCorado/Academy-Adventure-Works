@@ -7,8 +7,8 @@ models:
       - name: product_sk
         description: Primary key of the product table.
 
+      - name: product_id
+        description: Id of the product.
+
       - name: product_name
         description: Name of the product.
-
-
-

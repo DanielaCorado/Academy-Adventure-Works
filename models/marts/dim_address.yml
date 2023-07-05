@@ -9,15 +9,17 @@ models:
           - unique
           - not_null
 
+      - name: address_id
+        description: Id of address.
+
       - name: country_region_name
-        description: Name of the country/region.
+        description: Name of the country.
 
       - name: country_region_code
-        description: Code of the country's region/state.
+        description: Code of the country's.
 
       - name: state_province_name
-        description: Name of the country's region.
+        description: Name of the country's state.
 
       - name: city
         description: Name of the city.
-
